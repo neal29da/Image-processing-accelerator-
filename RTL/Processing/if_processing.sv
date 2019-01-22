@@ -1,12 +1,10 @@
-interface if_processing(input bit clk);
-
-    bit rst_n;
+interface if_processing(input bit clk, rst_n);
     
-    logic [1:0] slv_mode;
-    bit slv_data_valid, fifo_empty, wr, mstr_data_cmplt;
-    logic [7:0] slv_proc_val;
-    logic [DATA_WIDTH - 1 : 0] slv_data, data_out;
+    logic [1:0] slvx_mode;
+    bit slvx_data_valid, fifo_empty, wr, mstr_data_cmplt;
+    logic [7:0] slvx_proc_val;
+    logic [D_WIDTH - 1 : 0] slvx_data, data_out;
         
-    modport DUT (input bit rst_n, clk, slv_data_valid, fifo_empty, input logic [1:0] slv_mode, input logic [7:0] slv_proc_val, input logic [DATA_WIDTH - 1 : 0] slv_data, output bit wr, mstr_data_cmplt, output logic [DATA_WIDTH - 1 : 0] data_out );
+  modport DUT(input rst_n, clk, slvx_data_valid, fifo_empty, slvx_mode, slvx_proc_val,slvx_data, output wr, mstr_data_cmplt, data_out );
 
 endinterface
