@@ -60,12 +60,12 @@ always @(posedge dut_if.clk or negedge dut_if.rst_n) begin
                 p2 = 2'b00;
             end
         end else begin
-        if ((dut_if.slv_mode != 0) && dut_if.slv_data_valid) begin
+        if ((dut_if.slvx_mode != 0) && dut_if.slvx_data_valid) begin
           valid_counter = {valid_counter[2:0], 1'b1};
           count_in <= count_in + (D_WIDTH >> 5);
           ind_in <= ind_in + 2'b01;
           if (ind_in == 2'b10) ind_in <= 2'b00;
-          my_pixels[ind_in] <= dut_if.slv_data;
+          my_pixels[ind_in] <= dut_if.slvx_data;
         end else
             valid_counter = {valid_counter[2:0], 1'b0};
         end
@@ -73,7 +73,7 @@ always @(posedge dut_if.clk or negedge dut_if.rst_n) begin
 
 always @(posedge dut_if.clk) begin
   if (valid_counter[3]) begin
-    	proc_val <= dut_if.slv_proc_val;
+    	proc_val <= dut_if.slvx_proc_val;
         if (D_WIDTH == 32) begin
             if (count_out == 0) data_size[31:16] = {my_pixels[ind_out][23:16], my_pixels[ind_out][31:24]};
             if (count_out == 1) data_size[15:0] = {my_pixels[ind_out][7:0], my_pixels[ind_out][15:8]};
@@ -116,7 +116,7 @@ if (D_WIDTH == 32) begin
 always @(posedge dut_if.clk) begin
         if (pix_done) begin
         pix_count <= 2'b11;
-	     if (dut_if.slv_mode == 2'b01) begin
+	     if (dut_if.slvx_mode == 2'b01) begin
 	      if ((my_pixels[p0][23:16] + my_pixels[p0][15:8] + my_pixels[p0][7:0])/3 > proc_val) begin
 	      pix_low[p0][23:0] = 24'hffffff;
         end else pix_low[p0][23:0] = 24'h000000;
@@ -143,7 +143,7 @@ always @(posedge dut_if.clk) begin
           pix_low[p2] = {24'h000000, pix_low[p2][7:0]};
           end
 
-	      end else if (dut_if.slv_mode == 2'b10) begin
+	      end else if (dut_if.slvx_mode == 2'b10) begin
             if (proc_val[7] == 1'b1) begin
             for (int i=0; i<3; i++) begin
                 pix_low[i][31:24] = (my_pixels[i][31:24] < diff_val) ? 8'h00 : (my_pixels[i][31:24] - diff_val);
@@ -168,7 +168,7 @@ end else if (D_WIDTH == 64) begin
 always @(posedge dut_if.clk) begin
         if (pix_done) begin
         pix_count <= 2'b11;
-	     if (dut_if.slv_mode == 2'b01) begin
+	     if (dut_if.slvx_mode == 2'b01) begin
 	      if ((my_pixels[p0][23:16] + my_pixels[p0][15:8] + my_pixels[p0][7:0])/3 > proc_val) begin
 	      pix_low[p0][23:0] = 24'hffffff;
         end else pix_low[p0][23:0] = 24'h000000;
@@ -223,7 +223,7 @@ always @(posedge dut_if.clk) begin
 		 pix_high[p2] = {24'h000000, pix_high[p2][7:0]};
 		end
  
-	      end else if (dut_if.slv_mode == 2'b10) begin
+	      end else if (dut_if.slvx_mode == 2'b10) begin
             if (proc_val[7] == 1'b1) begin
             for (int i=0; i<3; i++) begin
                 pix_low[i][31:24] = (my_pixels[i][31:24] < diff_val) ? 8'h00 : (my_pixels[i][31:24] - diff_val);
