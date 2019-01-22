@@ -1,5 +1,5 @@
 // Code your design here
-module arbiter(inter.DUT arb_if);
+module arbiter(arbiter_if.DUT arb_if);
   parameter DW = 32;
   logic [1:0] slvx_mode;
   logic [DW-1:0]  slvx_data;
