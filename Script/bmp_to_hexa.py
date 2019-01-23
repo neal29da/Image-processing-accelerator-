@@ -30,7 +30,7 @@ hexa_file.write(new_data)
 
 # Close File
 hexa_file.close()
-linux_command = """a=$(fold -w4 """ + output_file1 + """); echo "$a" > """ + output_file2
+linux_command = """a=$(fold -w8 """ + output_file1 + """); echo "$a" > """ + output_file2
 
 system(linux_command)
 
