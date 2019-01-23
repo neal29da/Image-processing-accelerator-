@@ -53,10 +53,10 @@ arbiter U0(
 
   initial
     $readmemh("hexa_output_8B.txt", RAM);integer i;
-  initial begin 
+  /*initial begin 
     for(i=0;i<101;i=i+1)             
       $display ("RAM[%d]=%h",i,RAM[i]); 
-  end  
+  end*/  
  /*BEGIN TESTBENCH*/
   
     /*INItial values*/
@@ -104,6 +104,11 @@ initial begin
     t = t +2;
     slv1_data = RAM[t];
     t = t -1;
+    $display ("#______________________________#");
+    $display ("slv0_data=%h",slv0_data);
+    $display ("slv1_data=%h",slv1_data);
+     #3 $display ("slvx_data=%h",slvx_data);
+    $display ("#______________________________#");
    end 
     
   repeat (3) begin 
@@ -118,6 +123,11 @@ initial begin
     t = t +2;
     slv1_data = RAM[t];
     t = t -1;
+    $display ("#______________________________#");
+    $display ("slv0_data=%h",slv0_data);
+    $display ("slv1_data=%h",slv1_data);
+     #3 $display ("slvx_data=%h",slvx_data);
+    $display ("#______________________________#");
    end 
   repeat (3) begin 
     #10;
@@ -131,6 +141,11 @@ initial begin
     t = t +2;
     slv1_data = RAM[t];
     t = t -1;
+    $display ("#______________________________#");
+    $display ("slv0_data=%h",slv0_data);
+    $display ("slv1_data=%h",slv1_data);
+    #3 $display ("slvx_data=%h",slvx_data);
+    $display ("#______________________________#");
    end 
  #100;
   -> single_wr;
