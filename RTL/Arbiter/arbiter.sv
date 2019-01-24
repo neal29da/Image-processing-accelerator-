@@ -17,8 +17,9 @@ module arbiter(arbiter_if.DUT arb_if);
        arb_if.slv0_ready = 0;
        arb_if.slv1_ready = 0;
        arb_if.slvx_proc_val = 0;
+       ready_fifo = 1;
       end
-    else if (arb_if.slv0_mode && ~ arb_if.fifo_full && ~ arb_if.mstr0_cmplt) begin
+    else if (ready_fifo && arb_if.slv0_mode && ~ arb_if.fifo_full && ~ arb_if.mstr0_cmplt) begin
         arb_if.slv0_ready = 1;
             if(arb_if.slv0_data_valid) begin
               arb_if.slvx_mode = arb_if.slv0_mode;
