@@ -6,12 +6,13 @@ logic [D_WIDTH - 1:0] my_pixels [3];
 logic [31:0] count_in, count_out;
 logic [31:0] pix_low [3];
 logic [31:0] pix_high [3];
-logic [31:0] data_size;
+logic [31:0] data_size, data_width;
 logic [7:0] proc_val, diff_val;
 logic [1:0] ind_in, ind_out, pix_count;
 logic [1:0] p0, p1, p2;
 logic [3:0] valid_counter;
-bit   pix_done;
+logic [1:0] padding;
+bit   pix_done, reset_ind;
 
 //------for eda 
 logic [D_WIDTH - 1:0] pix0, pix1,pix2;
@@ -32,12 +33,20 @@ logic [31:0] pix10, pix11, pix12, pix20, pix21, pix22;
   
 assign diff_val = (proc_val[7] ) ?  (~proc_val + 1'b1) : proc_val;
 
+assign padding = (data_width % 4);
+  
 if (D_WIDTH == 32) begin
   assign  pix_done = ind_in[1] & !ind_in[0] & (count_in >= 8'h10) & (pix_count < 2);
 end else begin if (D_WIDTH == 64)         
   assign  pix_done = !ind_in[1] & ind_in[0] & (count_in >= 8'h12) & (pix_count < 2);
 end
 
+  always @(posedge dut_if.clk) begin
+    if (!(count_in % padding)) reset_ind = 1'b1;
+    else reset_ind = 1'b0;
+  end
+  
+  
 always @(posedge dut_if.clk or negedge dut_if.rst_n) begin
         if (!dut_if.rst_n || dut_if.mstr_data_cmplt) begin
             dut_if.data_out = 0;
@@ -50,6 +59,8 @@ always @(posedge dut_if.clk or negedge dut_if.rst_n) begin
             ind_in = 0;
             ind_out = 0;
             valid_counter = 0;
+            data_width = 0;
+            reset_ind = 0;
             if (D_WIDTH == 32) begin
                 p0 = 2'b10;
                 p1 = 2'b00;
@@ -71,14 +82,20 @@ always @(posedge dut_if.clk or negedge dut_if.rst_n) begin
         end
     end
 
+    
+    
+    
 always @(posedge dut_if.clk) begin
   if (valid_counter[3]) begin
     	proc_val <= dut_if.slvx_proc_val;
         if (D_WIDTH == 32) begin
-            if (count_out == 0) data_size[31:16] = {my_pixels[ind_out][23:16], my_pixels[ind_out][31:24]};
-            if (count_out == 1) data_size[15:0] = {my_pixels[ind_out][7:0], my_pixels[ind_out][15:8]};
+          if (count_out == 0) data_size[15:0] = {my_pixels[ind_out][7:0], my_pixels[ind_out][15:8]};
+          if (count_out == 1) data_size[31:16] = {my_pixels[ind_out][23:16], my_pixels[ind_out][31:24]};
+          if (count_out == 3) data_width[31:16] = {my_pixels[ind_out][23:16], my_pixels[ind_out][31:24]};
+          if (count_out == 4) data_width[15:0] = {my_pixels[ind_out][7:0], my_pixels[ind_out][15:8]};
         end else if (D_WIDTH == 64) begin
             if (count_out == 0) data_size[31:0] = {my_pixels[ind_out][23:16], my_pixels[ind_out][31:24], my_pixels[ind_out][39:32], my_pixels[ind_out][47:40]};
+            if (count_out == 4) data_width[31:0] = {my_pixels[ind_out][23:16], my_pixels[ind_out][31:24], my_pixels[ind_out][39:32], my_pixels[ind_out][47:40]};
         end
     end
 end
@@ -131,10 +148,10 @@ always @(posedge dut_if.clk) begin
 		
 		if ((my_pixels[p1][31:24] + my_pixels[p1][23:16] + my_pixels[p2][7:0])/3 > proc_val) begin
 		 pix_low[p2][7:0] = 8'hff;
-		 pix_low[p1] = {16'hffffff, pix_low[p1][15:0]};
+		 pix_low[p1] = {16'hffff, pix_low[p1][15:0]};
 		end else begin 
 		 pix_low[p2][7:0] = 8'h00;
-		pix_low[p1] = {16'h000000, pix_low[p1][15:0]};
+		pix_low[p1] = {16'h0000, pix_low[p1][15:0]};
 		end
 		
 	      if ((my_pixels[p2][31:24] + my_pixels[p2][23:16] + my_pixels[p2][15:8])/3 > proc_val) begin 
@@ -254,3 +271,4 @@ always @(posedge dut_if.clk) begin
 end   
 
 endmodule
+
