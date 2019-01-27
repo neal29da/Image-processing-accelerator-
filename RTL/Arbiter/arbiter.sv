@@ -44,7 +44,7 @@ module arbiter(arbiter_if.DUT arb_if);
           end
       else arb_if.slvx_data <= 0;    
     end
-  always @ (posedge clk ) begin
+  always @ (posedge arb_if.clk ) begin
     if(arb_if.fifo_full) begin
       arb_if.slv0_ready = 0;
       arb_if.slv1_ready = 0;
