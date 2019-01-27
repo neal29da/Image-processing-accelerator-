@@ -1,50 +1,25 @@
 interface fifo_if(input bit clk,rst_n);
     logic               wr;
-    logic               rd;
+    logic               mstr0_ready;
     logic               fifo_full;
     logic               fifo_empty;
-    logic       [7:0]   data_in;
-    logic       [7:0]   data_out;
+    logic       [D_WIDTH-1:0]   data_fifo;
+    logic       [D_WIDTH-1:0]   mstr0_data;
+    logic           	data_valid;
+
 
 
 
 modport DUT_FIFO (  input       wr,
-                    input       rd,
+                    input       mstr0_ready,
                     input    	rst_n,
                     input       clk,
-                    input       data_in,
+                    input       data_fifo,
                     output      fifo_full,
                     output      fifo_empty,
-                    output      data_out
+                    output      mstr0_data,
+                    output      data_valid
 
                 );
 
-modport DUT_MEM_ARR (
-                    input       clk,
-                    input       data_in,
-                    output      data_out
-);
-
-modport DUT_READ_POI (
-                    input       clk,
-                    input       rst_n,
-                    input       rd,
-                    input       fifo_full
-);
-
-modport DUT_STATUS  (
-                    input       clk,
-                    input       rst_n,
-                    input       rd,
-                    input       wr,
-                    output      fifo_full,
-                    output      fifo_empty
-);
-modport DUT_WR_POI (
-                    input       clk,
-                    input       wr,
-                    input       rst_n,
-                    input       fifo_full
-
-);
 endinterface
