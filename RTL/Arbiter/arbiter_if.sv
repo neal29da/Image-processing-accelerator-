@@ -17,6 +17,7 @@ interface arb_if(input bit clk,rst_n);
     logic     [DW-1:0]  slvx_data;
     logic      		    slv0_ready;
     logic      		    slv1_ready;
+    logic               data_source;
     
     //clocking cb @(posedge clk);
     //endclocking
