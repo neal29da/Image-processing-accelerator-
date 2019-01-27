@@ -32,6 +32,7 @@ interface IP_interface(input bit clk, rst_n);
 
     //****************IP MODULE
     modport DUT_IP(output   data_source
+    //
     );
     
     //****************Processing MODULE 
