@@ -15,7 +15,7 @@ interface IP_interface(input bit clk, rst_n);
     logic      		    slv1_ready;
     logic     [DW-1:0]  mstr0_data;
     logic               mstr0_ready;
-    output logic     [1:0]	    mstr0_data_valid;
+    logic     [1:0]	    mstr0_data_valid;
 
  //internal signals   
     
@@ -30,18 +30,20 @@ interface IP_interface(input bit clk, rst_n);
     logic           	data_valid;
     logic           	data_source;
 
-    
+    //****************IP MODULE
+    modport DUT_IP(output   data_source
+    );
     
     //****************Processing MODULE 
 
-    modport DUT_PROCESSING(input    rst_n,
+    modport DUT_PROCESSING( input    rst_n,
                                     clk,
                                     slvx_data_valid,
                                     fifo_empty,
                                     slvx_mode,
                                     slvx_proc_val,
                                     slvx_data,
-                                    output wr,
+                            output  wr,
                                     mstr0_cmplt,
                                     data_fifo 
                                 );
