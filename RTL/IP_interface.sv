@@ -1,6 +1,7 @@
 interface IP_interface(input bit clk, rst_n);
     parameter DW = 32;
 
+
     logic       		mstr0_cmplt;
     logic     [1:0]  	slv0_mode;
     logic     [1:0]  	slv1_mode;
