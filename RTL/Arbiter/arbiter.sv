@@ -22,24 +22,24 @@ module arbiter(arbiter_if.DUT arb_if);
       end
     else if (ready_fifo && arb_if.slv0_mode && ~ arb_if.fifo_full && ~ arb_if.mstr0_cmplt) begin
         arb_if.slv0_ready = 1;
+        arb_if.slv1_ready = 0;
             if(arb_if.slv0_data_valid) begin
               arb_if.slvx_mode = arb_if.slv0_mode;
               arb_if.slvx_data_valid = arb_if.slv0_data_valid;
               arb_if.slvx_proc_val = arb_if.slv0_proc_valid;
               arb_if.slvx_data = arb_if.slv0_data;
-              arb_if.slv1_ready = 0;
               arb_if.data_source = 0;
         end
         else arb_if.slvx_data <= 0;
     end
     else if (arb_if.slv1_mode && ~ arb_if.fifo_full && ~ arb_if.mstr0_cmplt) begin
+    arb_if.slv0_ready = 0;
     arb_if.slv1_ready = 1;
       if(arb_if.slv1_data_valid) begin
           arb_if.slvx_mode = arb_if.slv1_mode;
           arb_if.slvx_data_valid = arb_if.slv1_data_valid;
           arb_if.slvx_proc_val = arb_if.slv1_proc_valid;
           arb_if.slvx_data = arb_if.slv1_data;
-          arb_if.slv0_ready = 0;
           arb_if.data_source = 1;
           end
       else arb_if.slvx_data <= 0;    
