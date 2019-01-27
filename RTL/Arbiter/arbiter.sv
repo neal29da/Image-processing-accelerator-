@@ -7,6 +7,7 @@ module arbiter(arbiter_if.DUT arb_if);
   logic slv0_ready;
   logic slv1_ready;
   logic ready_fifo;
+  logic data_source;
   
   // if data0 = '1' and data
   
@@ -27,6 +28,7 @@ module arbiter(arbiter_if.DUT arb_if);
               arb_if.slvx_proc_val = arb_if.slv0_proc_valid;
               arb_if.slvx_data = arb_if.slv0_data;
               arb_if.slv1_ready = 0;
+              arb_if.data_source = 0;
         end
         else arb_if.slvx_data <= 0;
     end
@@ -38,6 +40,7 @@ module arbiter(arbiter_if.DUT arb_if);
           arb_if.slvx_proc_val = arb_if.slv1_proc_valid;
           arb_if.slvx_data = arb_if.slv1_data;
           arb_if.slv0_ready = 0;
+          arb_if.data_source = 1;
           end
       else arb_if.slvx_data <= 0;    
     end
