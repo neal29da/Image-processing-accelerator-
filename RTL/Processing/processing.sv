@@ -77,7 +77,7 @@ assign reset_ind =  (reset_mode && ((count_in - HEADER_SIZE) % (((data_width * 3
 
 
 always @(posedge dut_if.clk or negedge dut_if.rst_n) begin
-        if (!dut_if.rst_n || dut_if.mstr0_cmplt) begin
+        if (!dut_if.rst_n || dut_if.mstr0_cmplt || dut_if.slvx_mode == 2'b00) begin
             dut_if.data_fifo = 0;
             dut_if.wr = 0;
             dut_if.mstr0_cmplt = 0;
@@ -89,6 +89,17 @@ always @(posedge dut_if.clk or negedge dut_if.rst_n) begin
             ind_out = 0;
             valid_counter = 0;
             data_width = 0;
+            proc_val = 0;
+            my_pixels [0] = 0;
+            my_pixels [1] = 0;
+            my_pixels [2] = 0;
+            pix_low [0] = 0;
+            pix_low [1] = 0;
+            pix_low [2] = 0;
+            pix_high [0] = 0;
+            pix_high [1] = 0;
+            pix_high [2] = 0;
+
             if (DW == 32) begin
                 p0 = 2'b10;
                 p1 = 2'b00;
