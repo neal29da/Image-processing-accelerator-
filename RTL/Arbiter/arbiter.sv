@@ -35,13 +35,13 @@ module arbiter(arbiter_if.DUT arb_if);
         arb_if.slvx_data_valid = arb_if.slv0_data_valid;
         end
     end
-    else if (arb_if.slv1_mode && ~ arb_if.fifo_full && ~ arb_if.mstr0_cmplt) begin
+    else if (arb_if.slv1_mode && ~ arb_if.fifo_full && ~arb_if.mstr0_cmplt) begin
     arb_if.slv0_ready = 0;
     arb_if.slv1_ready = 1;
       if(arb_if.slv1_data_valid) begin
           arb_if.slvx_mode = arb_if.slv1_mode;
-          arb_if.slvx_data_valid = arb_if.slv1_data_valid;
-          arb_if.slvx_proc_val = arb_if.slv1_proc_valid;
+          arb_if.slvx_data_valid = slv1_data_valid;
+          slvx_proc_val = arb_if.slv1_proc_valid;
           arb_if.slvx_data = arb_if.slv1_data;
           arb_if.data_source = 1;
           end
@@ -61,11 +61,13 @@ module arbiter(arbiter_if.DUT arb_if);
   end
 
   always @ (posedge arb_if.clk ) begin
-    if ((arb_if.slv0_mode == 2'b01) && arb_if.slv0_ready) begin
+    if (arb_if.slv0_mode == 2'b00)  begin
       ready_fifo = 0;
+      arb_if.slv1_ready = 0;
       end
-    else if ((arb_if.slv1_mode == 2'b10) && arb_if.slv1_ready) begin
+        else if (arb_if.slv1_mode == 2'b00) begin
       ready_fifo = 1;
+      arb_if.slv1_ready = 0;
     end
     end
 endmodule
