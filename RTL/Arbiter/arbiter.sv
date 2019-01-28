@@ -61,10 +61,10 @@ module arbiter(arbiter_if.DUT arb_if);
   end
 
   always @ (posedge arb_if.clk ) begin
-    if ((arb_if.mode == 2'b01) && arb_if.slv0_ready) begin
+    if ((arb_if.slv0_mode == 2'b01) && arb_if.slv0_ready) begin
       ready_fifo = 0;
       end
-    else if ((arb_if.mode == 2'b10) && arb_if.slv1_ready) begin
+    else if ((arb_if.slv1_mode == 2'b10) && arb_if.slv1_ready) begin
       ready_fifo = 1;
     end
     end
