@@ -41,7 +41,7 @@ module arbiter(arbiter_if.DUT arb_if);
       if(arb_if.slv1_data_valid) begin
           arb_if.slvx_mode = arb_if.slv1_mode;
           arb_if.slvx_data_valid = arb_if.slv1_data_valid;
-          slvx_proc_val = arb_if.slv1_proc_valid;
+          arb_if.slvx_proc_val = arb_if.slv1_proc_valid;
           arb_if.slvx_data = arb_if.slv1_data;
           arb_if.data_source = 1;
           end
