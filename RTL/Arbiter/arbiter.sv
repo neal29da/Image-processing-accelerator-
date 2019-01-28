@@ -66,7 +66,7 @@ module arbiter(arbiter_if.DUT arb_if);
     if (arb_if.slv0_mode == 2'b00)  begin
       arb_if.slv0_ready = 0;
       end
-        else if (arb_if.slv1_mode == 2'b00) begin
+    if (arb_if.slv1_mode == 2'b00) begin
       arb_if.slv1_ready = 0;
       ready_fifo = 0;
     end
