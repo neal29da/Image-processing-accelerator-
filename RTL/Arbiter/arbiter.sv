@@ -23,6 +23,7 @@ module arbiter(arbiter_if.DUT arb_if);
     else if (~ ready_fifo && arb_if.slv0_mode && ~ arb_if.fifo_full && ~ arb_if.mstr0_cmplt) begin
         arb_if.slv0_ready = 1;
         arb_if.slv1_ready = 0;
+        ready_fifo = 0;
             if(arb_if.slv0_data_valid) begin
               arb_if.slvx_mode = arb_if.slv0_mode;
               arb_if.slvx_data_valid = arb_if.slv0_data_valid;
@@ -38,6 +39,7 @@ module arbiter(arbiter_if.DUT arb_if);
     else if (arb_if.slv1_mode && ~ arb_if.fifo_full && ~arb_if.mstr0_cmplt) begin
     arb_if.slv0_ready = 0;
     arb_if.slv1_ready = 1;
+    ready_fifo = 1;
       if(arb_if.slv1_data_valid) begin
           arb_if.slvx_mode = arb_if.slv1_mode;
           arb_if.slvx_data_valid = arb_if.slv1_data_valid;
@@ -66,6 +68,7 @@ module arbiter(arbiter_if.DUT arb_if);
       end
         else if (arb_if.slv1_mode == 2'b00) begin
       arb_if.slv1_ready = 0;
+      ready_fifo = 0;
     end
     end
 endmodule
