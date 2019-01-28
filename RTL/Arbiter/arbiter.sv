@@ -1,6 +1,8 @@
 module arbiter(arbiter_if.DUT arb_if);
   parameter DW = 32;
   
+  // if data0 = '1' and data
+  
   always @ (posedge arb_if.clk or negedge arb_if.rst_n)
     if(! arb_if.rst_n) begin
        arb_if.slvx_mode=0;
@@ -10,7 +12,7 @@ module arbiter(arbiter_if.DUT arb_if);
        arb_if.slvx_proc_val = 0;
        arb_if.data_source = 0;
       end
-    else if (~ ready_fifo && arb_if.slv0_mode && ~ arb_if.fifo_full && ~ arb_if.mstr0_cmplt) begin
+    else if ((~arb_if.data_source || (arb_if.slv1_mode == 0)) && arb_if.slv0_mode && ~ arb_if.fifo_full && ~ arb_if.mstr0_cmplt) begin
         arb_if.slv0_ready = 1;
         arb_if.slv1_ready = 0;
         arb_if.data_source = 0;
@@ -66,10 +68,10 @@ module arbiter(arbiter_if.DUT arb_if);
     if (arb_if.slv1_mode == 2'b00) begin
       arb_if.slv1_ready = 0;
       arb_if.data_source = 0;
-    end
-    end
-    end
 
+    end
+    end
+    end
   always @ (posedge arb_if.clk ) begin
       if (arb_if.mstr0_cmplt) begin
       arb_if.slvx_mode=0;
