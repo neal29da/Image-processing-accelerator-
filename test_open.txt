@@ -1,0 +1,69 @@
+class sqnc_ip extends uvm_sequence #(trns_ip);
+    `uvm_object_utils(sqnc_ip)
+    
+    string test_type;
+    int repeat_count;
+    function new(string name = "");
+        super.new(name);
+    endfunction
+
+
+    task body;
+        trns_ip my_trns;
+        logic [DW-1:0] my_slv0_data;
+        logic [DW-1:0] my_slv1_data;
+        integer slv0_input, slv1_input;
+        string slv0_file, slv1_file;
+        logic [7:0] my_slv0_p_val, my_slv1_p_val;
+        logic [1:0] my_slv0_mode, my_slv1_mode;
+        integer count;
+        logic [1:0] file_end;
+//	repeat (repeat_count) begin
+	    slv0_file = "input0.txt";
+	    slv1_file = "input1.txt";
+
+	    slv0_input=$fopen(slv0_file,"r");
+        slv1_input=$fopen(slv1_file,"r");
+        file_end = 2'b11;
+        
+        while (file_end != 0) begin
+        
+      	if (!$feof(slv0_input)) $fscanf(slv0_input,"%h\n", my_slv0_data);
+        else file_end[0] = 0;
+        if (!$feof(slv1_input)) $fscanf(slv1_input,"%h\n", my_slv1_data); 
+        else file_end[1] = 0;
+        
+        if (file_end != 0) begin
+            start_item(my_trns);
+            my_trns = trns_ip::type_id::create("my_trns");
+            my_trns.trans_mode_basic.constraint_mode(0);
+            if (!count) begin
+                if (!my_trns.randomize(slv0_proc_valid, slv1_proc_valid, slv0_mode, slv1_mode)) `uvm_error("", "my_trns randomize failed")
+                my_slv0_p_val = my_trns.slv0_proc_valid;
+                my_slv1_p_val = my_trns.slv1_proc_valid;
+                my_slv0_mode = my_trns.slv0_mode;
+                my_slv1_mode = my_trns.slv1_mode;
+            end
+            
+            if (!my_trns.randomize(slv0_data_valid, slv1_data_valid, mstr0_ready, slv0_data, slv1_data)) `uvm_error("", "my_trns randomize failed")
+            
+            if (my_trns.slv0_data_valid) my_trns.slv0_data = my_slv0_data;
+            if (my_trns.slv1_data_valid) my_trns.slv1_data = my_slv1_data;
+            my_trns.slv0_proc_valid = my_slv0_p_val;
+            my_trns.slv1_proc_valid = my_slv1_p_val;
+            my_trns.slv0_mode = my_slv0_mode;
+            my_trns.slv1_mode = my_slv1_mode;
+
+            finish_item(my_trns);
+        end 
+        end 
+         
+        $fclose(slv0_input);
+        $fclose(slv1_input);
+        
+     // end
+      
+      
+      
+    endtask
+endclass
