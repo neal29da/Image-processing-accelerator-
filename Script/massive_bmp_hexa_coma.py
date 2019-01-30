@@ -41,8 +41,8 @@ for filename in glob.glob(PATH + '*.bmp'):
     #   width calculation to the current hexa code
     width = int((len(new_data) / LENGTH) + 1)
 
-    new_data = ",\n".join([new_data[i:i + LENGTH] for i in range(0, len(new_data), LENGTH)])
-
+    new_data = (",\n" + str(DATA_WIDTH) + "'h").join([new_data[i:i + LENGTH] for i in range(0, len(new_data), LENGTH)])
+    new_data = (str(DATA_WIDTH) + "'h") + new_data
     id = filename.replace('.bmp', '').replace(PATH, '')
 
     hexa_file.write('logic [' + str(DATA_WIDTH) + '-1:0] ' + id + ' [' + str(width) + ":0] ={" + '\n')
