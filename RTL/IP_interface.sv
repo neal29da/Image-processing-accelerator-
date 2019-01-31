@@ -2,7 +2,6 @@ interface IP_interface(input bit clk, rst_n);
     parameter DW = 32;
 
 
-    logic       		mstr0_cmplt;
     logic     [1:0]  	slv0_mode;
     logic     [1:0]  	slv1_mode;
     logic        		slv0_data_valid;
@@ -29,32 +28,52 @@ interface IP_interface(input bit clk, rst_n);
     logic     [DW-1:0]  data_fifo;
     logic           	data_valid;
     logic           	data_source;
+    logic       		mstr0_cmplt;
+    logic       		proc_cmplt;
+
 
     //****************IP MODULE
-    modport DUT_IP(output   data_source
-    //
+    modport DUT_IP(		        input       rst_n,
+                                input       clk,
+                                input       slv0_mode,
+                                input       slv1_mode,
+                                input       slv0_data_valid,
+                                input       slv1_data_valid,
+                                input       slv0_proc_valid,
+                                input       slv1_proc_valid,
+                                input       slv0_data,
+                                input       slv1_data,
+                                output      slv0_ready,
+                                output	    slv1_ready,
+                                output      mstr0_data,
+                                output	    mstr0_data_valid,
+                                output      mstr0_ready
+
+    
     );
     
     //****************Processing MODULE 
 
     modport DUT_PROCESSING( input    rst_n,
-                                    clk,
-                                    slvx_data_valid,
-                                    fifo_empty,
-                                    slvx_mode,
-                                    slvx_proc_val,
-                                    slvx_data,
+                            input        clk,
+                            input        slvx_data_valid,
+                            input        fifo_empty,
+                            input        slvx_mode,
+                            input        slvx_proc_val,
+                            input        slvx_data,
                             output  wr,
-                                    mstr0_cmplt,
-                                    data_fifo 
+                            output       proc_cmplt,
+                            output       data_fifo
+  
                                 );
 
 
     //****************Arbiter MODULE
     
 
-    modport DUT_ARBITER (       input       mstr0_cmplt,
+    modport DUT_ARBITER (       input       proc_cmplt,
                                 input       fifo_full,
+                                input       fifo_empty,
                                 input    	rst_n,
                                 input       clk,
                                 input       slv0_mode,
@@ -71,8 +90,9 @@ interface IP_interface(input bit clk, rst_n);
                                 output      slvx_data,
                                 output      slv0_ready,
                                 output      slv1_ready,
-                                output      data_source
-
+                                output      data_source,
+                                output      mstr0_cmplt
+			      
             );
 
    
@@ -85,9 +105,39 @@ modport DUT_FIFO (  input       wr,
                     input       data_fifo,
                     output      fifo_full,
                     output      fifo_empty,
-                    output      mstr0_data,
-                    output      data_valid
-
+                    output      mstr0_data
                 );
 
+                
+modport DUT_MEM_ARR (
+                    input       clk,
+                    input       data_fifo,
+                    output      mstr0_data
+);
+
+modport DUT_READ_POI (
+                    input       clk,
+                    input       rst_n,
+                    input       mstr0_ready,
+                    input       fifo_empty
+);
+
+modport DUT_STATUS  (
+                    input       clk,
+                    input       rst_n,
+                    input       mstr0_ready,
+                    input       wr,
+                    output      fifo_full,
+                    output      fifo_empty,
+		    output	data_valid
+);
+modport DUT_WR_POI (
+                    input       clk,
+                    input       wr,
+                    input       rst_n,
+                    input       fifo_full
+
+);
+                
 endinterface
+
