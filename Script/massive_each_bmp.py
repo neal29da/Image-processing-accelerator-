@@ -38,7 +38,7 @@ for filename in glob.glob(PATH + '*.bmp'):
 
     #   adding padding
     new_data = data[0:108]
-    new_data = new_data + '0000'
+    new_data = new_data + '000000000000'
     new_data = new_data + data[108:]
 
     #   width calculation to the current hexa code
