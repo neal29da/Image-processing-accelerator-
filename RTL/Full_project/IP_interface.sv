@@ -25,6 +25,7 @@ interface IP_interface(input bit clk, rst_n);
     logic               wr;
     logic               fifo_full;
     logic               fifo_empty;
+    logic               fifo_threshold;
     logic     [DW-1:0]  data_fifo;
     logic           	data_valid;
     logic           	data_source;
@@ -73,6 +74,7 @@ interface IP_interface(input bit clk, rst_n);
 
     modport DUT_ARBITER (       input       proc_cmplt,
                                 input       fifo_full,
+                                input       fifo_threshold,
                                 input       fifo_empty,
                                 input    	rst_n,
                                 input       clk,
@@ -106,7 +108,7 @@ modport DUT_FIFO (  input       wr,
                     output      fifo_full,
                     output      fifo_empty,
                     output      mstr0_data,
-		    output	data_valid
+                    output	data_valid
 
                 );
 
@@ -131,7 +133,8 @@ modport DUT_STATUS  (
                     input       wr,
                     output      fifo_full,
                     output      fifo_empty,
-		    output	data_valid
+                    output	    data_valid,
+                    output      fifo_threshold
 );
 modport DUT_WR_POI (
                     input       clk,

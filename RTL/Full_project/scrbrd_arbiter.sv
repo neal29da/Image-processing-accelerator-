@@ -84,7 +84,7 @@ class scrbrd_arbiter extends uvm_component;
         wait_fifo = 1;
      end   
 
-            if (act_trns.proc_cmplt || wait_fifo || act_trns.mstr0_cmplt) begin	    
+            if ( wait_fifo || act_trns.mstr0_cmplt) begin	    
                 if (act_trns.slv0_ready || act_trns.slv1_ready) `uvm_error("SCB","wrong ready and proc_cmplt");
                 if (act_trns.slvx_data_valid || act_trns.slvx_mode) `uvm_error("SCB","wrong valid or mode and proc_cmplt");
             end else if (!exp_trns.fifo_full) begin
