@@ -1,5 +1,5 @@
 interface IP_interface(input bit clk, rst_n);
-    parameter DW = 32;
+  //  parameter DW = 32;
 
 
     logic     [1:0]  	slv0_mode;
@@ -105,7 +105,9 @@ modport DUT_FIFO (  input       wr,
                     input       data_fifo,
                     output      fifo_full,
                     output      fifo_empty,
-                    output      mstr0_data
+                    output      mstr0_data,
+		    output	data_valid
+
                 );
 
                 
@@ -140,4 +142,3 @@ modport DUT_WR_POI (
 );
                 
 endinterface
-
