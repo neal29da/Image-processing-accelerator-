@@ -1,6 +1,7 @@
 // Code your testbench here
 // or browse Examples
-parameter DW = 64;
+ parameter DW = 64;
+parameter FD = 16;
 
 `include "uvm_macros.svh"
 import uvm_pkg::*;
@@ -16,6 +17,8 @@ import uvm_pkg::*;
 `include "agnt_ip_exp.sv"
 `include "scrbrd_ip.sv"
 `include "sbscr_ip.sv"
+`include "scrbrd_arbiter.sv"
+`include "scrbrd_fifo.sv"
 `include "env_ip.sv"
 `include "test_ip.sv"
 `include "IP_interface.sv"
@@ -26,9 +29,9 @@ module top;
 
 bit clk, rst_n;
  
- 
- IP_interface my_ip_if(clk, rst_n); 
- IP my_ip (my_ip_if);
+
+ IP_interface  my_ip_if(clk, rst_n); 
+ IP #(DW) my_ip (my_ip_if);
      
 	
 	

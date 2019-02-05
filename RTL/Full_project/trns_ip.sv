@@ -39,19 +39,13 @@ class trns_ip extends uvm_sequence_item;
       slv1_mode dist {2'b00 := 1, 2'b10 := 5, 2'b01 := 5};
       slv0_data_valid dist {1'b0 := 1, 1'b1 := 10};
       slv1_data_valid dist {1'b0 := 1, 1'b1 := 10};
-      
+      slv0_proc_valid dist {8'h00 := 1, [8'h01 : 8'hfe] := 10, 8'hff := 1};
+      slv1_proc_valid dist {8'h00 := 1, [8'h01 : 8'hfe] := 10, 8'hff := 1};
+      mstr0_ready  dist {1'b0 := 1, 1'b1 := 5};
 
     }
 	
-    constraint trans_easy_check {
-        mstr0_ready  dist {1'b0 := 1, 1'b1 := 5}; //== 1'b1;
-	//slv0_proc_valid == 8'h7f;
-    //	slv1_proc_valid == 8'h7f;
 
-        //slv0_data_valid == 1'b1;
-       // slv1_data_valid == 1'b1;
-    }
-    
     constraint images_count {
        slv0_image inside {1, 50};
        slv1_image inside {51, 100};
@@ -63,7 +57,6 @@ class trns_ip extends uvm_sequence_item;
     
     function new(string name = "");
         super.new(name);
-	//ip_cover = new;
     endfunction
   
 

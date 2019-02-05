@@ -56,7 +56,8 @@ parameter DW = 32;
   always @(*)  
   begin  
    fi_if4.fifo_full =fbit_comp & pointer_equal;  
-   fi_if4.fifo_empty = (~fbit_comp) & pointer_equal;  
+   fi_if4.fifo_empty = (~fbit_comp) & pointer_equal;
+   fi_if4.fifo_threshold = (pointer_result[4] || pointer_result[3]) ? 1:0;  
   end  
   assign fi_if4.data_valid = ~fi_if4.fifo_empty;
  

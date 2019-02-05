@@ -156,7 +156,7 @@ assign dut_if.proc_cmplt = ((count_in >= (data_size >> 2) + 2) & (count_in >= HE
 end
 
 always @(posedge dut_if.clk) begin
-if (dut_if.proc_cmplt) last_count = 2'b10;
+if (dut_if.proc_cmplt) last_count = 2'b11;
 end
 
 
